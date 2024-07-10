@@ -1,0 +1,16 @@
+FROM debian:latest
+
+RUN apt update
+RUN apt install -y openvpn curl cron
+
+RUN echo "*/5 * * * * /etc/openvpn/renew-crl.sh" > /var/spool/cron/crontabs/root
+
+WORKDIR /etc/openvpn
+
+COPY bin/init.sh bin/server.sh bin/renew-crl.sh .
+
+RUN chmod +x ./*.sh
+
+RUN mkdir ccd
+
+ENTRYPOINT /etc/openvpn/server.sh

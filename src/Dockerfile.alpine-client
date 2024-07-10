@@ -1,0 +1,12 @@
+FROM alpine:latest
+
+RUN apk update
+RUN apk add openvpn
+
+WORKDIR /etc/openvpn
+
+COPY bin/init.sh bin/client.sh .
+
+RUN chmod +x ./*.sh
+
+ENTRYPOINT /etc/openvpn/client.sh

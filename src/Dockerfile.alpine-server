@@ -1,0 +1,16 @@
+FROM alpine:latest
+
+RUN apk update
+RUN apk add openvpn curl
+
+RUN echo "*/5 * * * * /etc/openvpn/renew-crl.sh" > /var/spool/cron/crontabs/root
+
+WORKDIR /etc/openvpn
+
+COPY bin/init.sh bin/server.sh bin/renew-crl.sh .
+
+RUN chmod +x ./*.sh
+
+RUN mkdir ccd
+
+ENTRYPOINT /etc/openvpn/server.sh
